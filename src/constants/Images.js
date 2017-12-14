@@ -9,5 +9,7 @@
 module.exports = {
 	user:{
 		demo : require("../assets/images/Demo.png"),
+		logo : require("../assets/images/logo.png"),
+		backIcon: require("../assets/images/back_arrow.png"),
 	}
 };

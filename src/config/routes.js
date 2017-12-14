@@ -6,9 +6,9 @@
  * */
 
 
-import Demo from "../components/common/Demo";
+import Login from "../containers/user/login";
 
 // export list of routes.
 export default routes = {
-	Demo : { screen: Demo },
+	Login : { screen: Login },
 };
