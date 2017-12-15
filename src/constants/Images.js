@@ -15,5 +15,10 @@ module.exports = {
 		customer: require("../assets/images/customer.png"),
 		username: require("../assets/images/username.png"),
 		password: require("../assets/images/password.png"),
+		facebook: require("../assets/images/facebook.png"),
+		instagram: require("../assets/images/instagram.png"),
+		email: require("../assets/images/email.png"),
+		phoneNum: require("../assets/images/phone_number.png"),
+		
 	}
 };

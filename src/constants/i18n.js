@@ -11,9 +11,10 @@ let Strings = {
   common:{
     username:'Username',
     ok: "Ok",
+    or: "or",
     save: "Save",
     name: "Name",
-    fullName: "Full Name",
+    fullName: "Full name",
     mobile: "Mobile No.",
     emailAddress: "Email Address",
     enterEmail: "Enter your email address.",
@@ -25,8 +26,8 @@ let Strings = {
     enterPassword: "Enter your password.",
     enterValidPassword: "Password should be 6-16 characters long and must be alphanumeric and must not contain spaces.",
     fullAddress: "Full Address",
-    signup:"Sign Up",
-    signin:"Sign In",
+    signup:"SIGN UP",
+    signin:"SIGN IN",
     contact:"Contact Support",
     write_us:"Write for us",
     contactNumber:"Enter mobile number.",
@@ -41,7 +42,12 @@ let Strings = {
     email:"Email"
   },
   signin:{
-    forgotPassword: "Forgot Password?"
+    forgotPassword: "Forgot Password?",
+    noAccount: "Don't have account?"
+  },
+  signup:{
+    accountAlready: "Already have an account?",
+    phoneNum: "Phone Number"
   },
   edit:{
 
