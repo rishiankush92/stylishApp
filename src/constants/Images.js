@@ -11,5 +11,9 @@ module.exports = {
 		demo : require("../assets/images/Demo.png"),
 		logo : require("../assets/images/logo.png"),
 		backIcon: require("../assets/images/back_arrow.png"),
+		customer_act: require("../assets/images/customer_act.png"),
+		customer: require("../assets/images/customer.png"),
+		username: require("../assets/images/username.png"),
+		password: require("../assets/images/password.png"),
 	}
 };

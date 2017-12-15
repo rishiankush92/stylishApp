@@ -9,6 +9,7 @@
 
 let Strings = {
   common:{
+    username:'Username',
     ok: "Ok",
     save: "Save",
     name: "Name",
@@ -46,6 +47,7 @@ let Strings = {
 
   },
   password:{
+    password:"Password",
     change:"Change Password",
     forgot:"Forgot Password",
     reset:"Reset Password",

@@ -27,14 +27,12 @@ export default class Background extends Component<{}> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor:'#1A1F19',
     alignItems:'center'
   },
   logoImg:{
-    marginTop: Constants.BaseStyle.DEVICE_HEIGHT/100 * 10,
-    height: Constants.BaseStyle.DEVICE_HEIGHT/100 * 20,
-    width: Constants.BaseStyle.DEVICE_WIDTH/100 *40,
-
+    marginTop: Constants.BaseStyle.DEVICE_HEIGHT/100 * 8,
+    height: Constants.BaseStyle.DEVICE_HEIGHT/100 * 17,
+    width: Constants.BaseStyle.DEVICE_WIDTH/100 *35
   }
 });
