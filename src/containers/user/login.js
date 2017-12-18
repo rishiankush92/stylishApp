@@ -15,11 +15,11 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
-const FBSDK = require('react-native-fbsdk');
-const {
-  LoginButton,
-  AccessToken
-} = FBSDK;
+// const FBSDK = require('react-native-fbsdk');
+// const {
+//   LoginButton,
+//   AccessToken
+// } = FBSDK;
 import Constants from '../../constants';
 import Background from '../../components/common/Background';
 import BackIcon from '../../components/common/BackButton';

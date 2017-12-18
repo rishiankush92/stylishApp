@@ -12,19 +12,23 @@ import ReactNative,{
   View,
   Image,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Slider,
+  FlatList
 } from 'react-native';
 
 import Constants from '../../constants';
 import Background from '../../components/common/Background';
 import Filters from '../../components/common/Filters';
+import StylishList from './stylishList';
+//import Calendar from 'react-native-calendar';
 
 export default class HomeScreen extends Component<{}> {
   constructor(props){
     super(props);
     this.state = {
       selected: 'distance',
-      //changeFilterImg: true
+      isChecked: 'fifty'
     }
   }
 
@@ -45,24 +49,54 @@ export default class HomeScreen extends Component<{}> {
   }
 
   render() {
-    console.log(this.state.selected)
     return (
       <View style={styles.container}>
         <Image source={Constants.Images.home.userProfileImg} style={styles.userImg} resizeMode='stretch' />
         <View style={styles.filterContainer}>
-          <TouchableOpacity onPress={()=>this.distanceFilter()} style={styles.imageContainer}>
-            <Image source={this.state.selected == 'distance' ? Constants.Images.home.distanceFilter : Constants.Images.home.distance } style={styles.filterStyle} resizeMode='stretch'/>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.ratingFilter()} style={styles.imageContainer}>
-            <Image source={this.state.selected == 'rating' ? Constants.Images.home.ratingFilter : Constants.Images.home.rating} style={styles.filterStyle} resizeMode='stretch'/>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.priceFilter()} style={styles.imageContainer}>
-            <Image source={this.state.selected == 'price' ? Constants.Images.home.priceFilter : Constants.Images.home.price} style={styles.filterStyle} resizeMode='stretch'/>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.calenderFilter()} style={styles.imageContainer}>
-            <Image source={this.state.selected == 'calender' ? Constants.Images.home.calenderFilter : Constants.Images.home.calender} style={styles.filterStyle} resizeMode='stretch'/>
-          </TouchableOpacity>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity onPress={()=>this.distanceFilter()}>
+              <Image source={this.state.selected == 'distance' ? Constants.Images.home.distanceFilter : Constants.Images.home.distance } style={styles.filterStyle} resizeMode='stretch'/>
+            </TouchableOpacity>
+            {this.state.selected == 'distance' ? <Text style={{color:'rgb(252, 228, 149)'}}>Distance</Text> : <Text style={{color:'#494A48'}}>Distance</Text>}
+          </View>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity onPress={()=>this.ratingFilter()}>
+              <Image source={this.state.selected == 'rating' ? Constants.Images.home.ratingFilter : Constants.Images.home.rating} style={styles.filterStyle} resizeMode='stretch'/>
+            </TouchableOpacity>
+            {this.state.selected == 'rating' ? <Text style={{color:'rgb(252, 228, 149)'}}>Rating</Text> : <Text style={{color:'#494A48'}}>Rating</Text>}
+          </View>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity onPress={()=>this.priceFilter()}>
+              <Image source={this.state.selected == 'price' ? Constants.Images.home.priceFilter : Constants.Images.home.price} style={styles.filterStyle} resizeMode='stretch'/>
+            </TouchableOpacity>
+            {this.state.selected == 'price' ? <Text style={{color:'rgb(252, 228, 149)'}}>Price</Text> : <Text style={{color:'#494A48'}}>Price</Text>}
+          </View>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity onPress={()=>this.calenderFilter()}>
+              <Image source={this.state.selected == 'calender' ? Constants.Images.home.calenderFilter : Constants.Images.home.calender} style={styles.filterStyle} resizeMode='stretch'/>
+            </TouchableOpacity>
+            {this.state.selected == 'calender' ? <Text style={{color:'rgb(252, 228, 149)'}}>Calendar</Text> : <Text style={{color:'#494A48'}}>Calendar</Text>}
+          </View>
         </View>
+        {this.state.selected == 'distance' && <Slider style={styles.slider} thumbTintColor='rgb(252, 228, 149)' minimumValue={10} step={1} maximumValue={100} thumbTintColor='rgb(252, 228, 149)' maximumTrackTintColor='#494A48' minimumTrackTintColor='rgb(252, 228, 149)' />}
+        {this.state.selected == 'rating' && <Slider style={styles.slider} thumbTintColor='rgb(252, 228, 149)' minimumValue={1} step={0.5} maximumValue={5} thumbTintColor='rgb(252, 228, 149)' maximumTrackTintColor='#494A48' minimumTrackTintColor='rgb(252, 228, 149)' />}
+        {this.state.selected == 'price' && 
+          <View style={{flexDirection:'row',marginHorizontal:Constants.BaseStyle.DEVICE_WIDTH/100*3,marginVertical:Constants.BaseStyle.DEVICE_HEIGHT/100*3}}>
+            <TouchableOpacity onPress={()=>this.setState({isChecked:'fifty'})} style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+              <Image source={this.state.isChecked == 'fifty' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:Constants.BaseStyle.DEVICE_HEIGHT/100*5,width:Constants.BaseStyle.DEVICE_WIDTH/100*8}} resizeMode='stretch'/>
+              {this.state.isChecked == 'fifty' ? <Text style={{color:'rgb(252, 228, 149)'}}>$50 - $100</Text> : <Text style={{color:'#494A48'}}>$50 - $100</Text>}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>this.setState({isChecked:'hundred'})} style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+              <Image source={this.state.isChecked == 'hundred' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:Constants.BaseStyle.DEVICE_HEIGHT/100*5,width:Constants.BaseStyle.DEVICE_WIDTH/100*8}} resizeMode='stretch'/>
+              {this.state.isChecked == 'hundred' ? <Text style={{color:'rgb(252, 228, 149)'}}>$100 - $150</Text> : <Text style={{color:'#494A48'}}>$100 - $150</Text>}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>this.setState({isChecked:'onefifty'})} style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+              <Image source={this.state.isChecked == 'onefifty' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:Constants.BaseStyle.DEVICE_HEIGHT/100*5,width:Constants.BaseStyle.DEVICE_WIDTH/100*8}} resizeMode='stretch'/>
+              {this.state.isChecked == 'onefifty' ? <Text style={{color:'rgb(252, 228, 149)'}}>$150 - $200</Text> : <Text style={{color:'#494A48'}}>$150 - $200</Text>}
+            </TouchableOpacity>
+          </View>
+        }
+        <StylishList />
       </View>
     );
   }
@@ -82,7 +116,8 @@ const styles = StyleSheet.create({
   },
   filterContainer:{
     backgroundColor:'#1A1F19',
-    flexDirection:'row'
+    flexDirection:'row',
+    marginHorizontal: Constants.BaseStyle.DEVICE_WIDTH/100 * 4,
   },
   filterStyle:{
     height: Constants.BaseStyle.DEVICE_HEIGHT/100 * 10,
@@ -92,6 +127,12 @@ const styles = StyleSheet.create({
     flex:1,
     marginTop: Constants.BaseStyle.DEVICE_HEIGHT/100 * 4,
     alignItems:'center'
+  },
+  slider:{ 
+    marginTop:Constants.BaseStyle.DEVICE_HEIGHT/100 * 3,
+    alignSelf:'center',
+    width: Constants.BaseStyle.DEVICE_WIDTH/100 * 80,
+    //color:'rgb(252, 228, 149)'
   }
 
 });
