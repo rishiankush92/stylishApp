@@ -12,7 +12,8 @@ import Home from "../containers/home/home";
 
 // export list of routes.
 export default routes = {
-	Home   : { screen: Home },
+	
 	Signup : { screen: Login },
+	Home   : { screen: Home },
 	Login  : { screen: Signup },
 };
