@@ -18,7 +18,17 @@ module.exports = {
 		facebook: require("../assets/images/facebook.png"),
 		instagram: require("../assets/images/instagram.png"),
 		email: require("../assets/images/email.png"),
-		phoneNum: require("../assets/images/phone_number.png"),
-		
+		phoneNum: require("../assets/images/phone_number.png")
+	},
+	home:{
+		userProfileImg: require("../assets/images/profile.png"),
+		distanceFilter: require("../assets/images/distance_filter.png"),
+		distance: require("../assets/images/distance.png"),
+		priceFilter: require("../assets/images/price_act.png"),
+		price: require("../assets/images/price.png"),
+		ratingFilter: require("../assets/images/rating_act.png"),
+		rating: require("../assets/images/rating.png"),
+		calenderFilter: require("../assets/images/calendar_act.png"),
+		calender: require("../assets/images/calendar.png"),
 	}
 };
