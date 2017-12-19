@@ -15,11 +15,13 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
+import { LoginManager,AccessToken } from 'react-native-fbsdk';
 // const FBSDK = require('react-native-fbsdk');
 // const {
 //   LoginButton,
 //   AccessToken
 // } = FBSDK;
+
 import Constants from '../../constants';
 import Background from '../../components/common/Background';
 import BackIcon from '../../components/common/BackButton';
@@ -34,7 +36,47 @@ export default class Login extends Component<{}> {
       password:''
     }
   }
+  _fbAuth() {
+    LoginManager.logInWithReadPermissions(['public_profile','email']).then(function(result) {
+      if (result.isCancelled) {
+        console.log("Login Cancelled");
+      } else {
+        console.log('testttt',result)
+        AccessToken.getCurrentAccessToken().then((data) => {
+        
+          const { accessToken } = data
+          console.log('acccccc--',data.accessToken)
+          console.log('gadasdhsah')
+          fetch('https://graph.facebook.com/v2.5/me?fields=email,name&access_token=' + data.accessToken)
+          .then((response) => response.json())
+          .then((json) => {
+            // Some user object has been set up somewhere, build that user here
+            user.name = json.name
+            user.id = json.id
+            user.user_friends = json.friends
+            user.email = json.email
+            user.username = json.name
+            user.loading = false
+            user.loggedIn = true
+            user.avatar = setAvatar(json.id)   
+            console.log('asdsfds fdsf fsdsfdsfdsf',user.name)   
+          })
+          .catch(() => {
+            reject('ERROR GETTING DATA FROM FACEBOOK')
+          })
 
+        })
+      
+        console.log("Login Success permission granted:" + result.grantedPermissions);
+      }
+    }, function(error) {
+       console.log("some error occurred!!");
+    })
+  }
+  initUser(token) {
+   
+  }
+  
   render() {
     return (
       <View style={styles.container}>
@@ -59,7 +101,8 @@ export default class Login extends Component<{}> {
             />
             <Text style={styles.orText}>{Constants.i18n.common.or}</Text>
             <View style={styles.socialIcons}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this._fbAuth}>
+              
                 <Image source={Constants.Images.user.facebook} style={styles.fbImg} resizeMode='stretch'/>
               </TouchableOpacity>
               <TouchableOpacity>
