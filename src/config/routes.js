@@ -12,7 +12,7 @@ import Home from "../containers/home/home";
 
 // export list of routes.
 export default routes = {
+	Signup : { screen: Signup },
 	Home   : { screen: Home },
-	Signup : { screen: Login },
-	Login  : { screen: Signup },
+	Login  : { screen: Login },
 };

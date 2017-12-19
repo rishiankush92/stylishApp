@@ -7,13 +7,13 @@
  * */
 
 const localhost       = "localhost:3000",
-      staging         = "xyz.com",
+      staging         = "52.34.207.5:4129",
       live            = "xyz.com";
 
-const running_url   = localhost,
+const running_url   = staging,
     http_url        = `http://${running_url}`,
     socket_url      = `ws://${running_url}/websocket`,
-    apiBase_url     = `http://${running_url}/rest/v1/`,
+    apiBase_url     = `http://${running_url}/api/v1`,
     staticPagesUrl  = `http://${running_url}/`,
     mediaBase_url   = `http://${running_url}/store/files/uploads/`;
 

@@ -32,6 +32,7 @@ class RestClient {
     static post(url, params, token = '',userId='') {
         let context = this,
             logintoken;
+            console.log('url *** ',Connection.getResturl() + url)
         return new Promise(function(fulfill, reject) {
             context.isConnected().then(() => {
                     console.log("url=> ",Connection.getResturl() + url ," requestObject=> ",params, " x-auth-token => ",token, " x-user-id => ",userId )
@@ -56,6 +57,7 @@ class RestClient {
                             console.warn("eroro",error);
                         });
                 }).catch(error => {
+                    console.log("eroro ********* ",error);
                     fulfill({message:'Please check your internet connectivity or our server is not responding.'});
                 });
         });

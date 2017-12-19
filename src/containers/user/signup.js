@@ -23,8 +23,14 @@ import FormTextInput from '../../components/common/FormTextInput';
 import FormSubmitButton from '../../components/common/SubmitButton';
 import ReactMixin from "react-mixin";
 import TimerMixin from "react-timer-mixin";
+import _ from "lodash";
+import { ToastActionsCreators } from 'react-native-redux-toast';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as UserActions from '../../redux/modules/user';
+import Regex from '../../utilities/Regex';
 
-export default class Signup extends Component<{}> {
+class Signup extends Component<{}> {
   constructor(props){
     super(props);
     this.state={
@@ -33,6 +39,49 @@ export default class Signup extends Component<{}> {
       phoneNum:'',
       password:''
     }
+  }
+
+  customerSignUp(){
+    let context = this;
+    let { dispatch } = this.props.navigation;
+    let { fullName, email, phoneNum, password } = this.state;
+    let { navigate } = this.props.navigation;
+    //let { userType } = this.props.navigation.state.params;
+    let { enterMobile, enterValidMobile, enterFullName } = Constants.i18n.signup;
+    let { enterEmail, enterPassword, enterValidEmail, enterValidPassword } = Constants.i18n.common;
+    
+    if (_.isEmpty(fullName.trim())) {
+      console.log('hello')
+      alert(enterFullName)
+      return;
+    }
+
+    if(_.isEmpty(email.trim())) {
+      alert(enterEmail);
+      return;
+    }
+
+    if(!Regex.validateEmail(email.trim())) {
+      alert(enterValidEmail);
+      return;
+    }
+    if(_.isEmpty(phoneNum.trim())) {
+      alert(enterMobile);
+      return;
+    }
+    if(!Regex.validateMobile(phoneNum.trim())) {
+      alert(enterValidMobile);
+      return;
+    }
+    if(_.isEmpty(password)) {
+      alert(enterPassword);
+      return;
+    }
+    if(!Regex.validatePassword(password)){
+      alert(enterValidPassword);
+      return;
+    }
+    this.props.UserActions.consumerSignup({...this.state});
   }
 
   _handleScrollView(ref) {
@@ -62,6 +111,8 @@ export default class Signup extends Component<{}> {
   }
 
   render() {
+    // let { dispatch } = this.props.navigation;
+    // dispatch(ToastActionsCreators.displayInfo('hello'));
     return (
       <View style={styles.container}>
         <BackIcon />
@@ -98,7 +149,8 @@ export default class Signup extends Component<{}> {
               secureText={true}
 
             />
-            <FormSubmitButton 
+            <FormSubmitButton
+              _Press={()=>this.customerSignUp()}
               text={Constants.i18n.common.signup}
               style={styles.button}
             />
@@ -153,3 +205,9 @@ const styles = StyleSheet.create({
 });
 
 ReactMixin(Signup.prototype, TimerMixin);
+
+const mapDispatchToProps = dispatch => ({
+  UserActions: bindActionCreators(UserActions, dispatch)
+});
+
+export default connect(null, mapDispatchToProps)(Signup);
