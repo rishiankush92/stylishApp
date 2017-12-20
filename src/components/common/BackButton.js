@@ -18,12 +18,13 @@ import Constants from '../../constants';
 
 export default class BackButton extends Component<{}> {
   render() {
+    const {navigate,goBack} = this.props.navigation;
     return (
       <View style={[styles.container,this.props.containerStyle]}>
         <TouchableOpacity
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           underlayColor={Constants.Colors.Transparent} 
-          style={[styles.button,this.props.buttonStyle]} onPress={this.props.onPress}
+          style={[styles.button,this.props.buttonStyle]} onPress={()=>goBack()}
         >
           <Image
             source={Constants.Images.user.backIcon}

@@ -32,5 +32,9 @@ module.exports = {
 		calender: require("../assets/images/calendar.png"),
 		radioCheck: require("../assets/images/radio_check.png"),
 		radioUncheck: require("../assets/images/radio_uncheck.png"),
+	},
+	rating:{
+		enabledRating: require("../assets/images/star.png"),
+		disabledRating: require("../assets/images/star_unselected.png")
 	}
 };

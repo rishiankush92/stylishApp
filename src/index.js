@@ -53,19 +53,19 @@ class Main extends Component{
 		//checkPermissions(store);
 	}
 
-	// componentWillMount() {
-	// 	/* *
-	// 	 * @function: Initiliazing push notification utility
-	// 	 * */
-	// 	pushNotificationInit(store); 
-	// 	function handleFirstConnectivityChange(isConnected) {
-	//       NetInfo.isConnected.removeEventListener('change',handleFirstConnectivityChange);
-	//     }
-	//     NetInfo.isConnected.addEventListener('change',handleFirstConnectivityChange);
-	//     NetInfo.isConnected.fetch().then(isConnected => {
+	componentWillMount() {
+		/* *
+		 * @function: Initiliazing push notification utility
+		 * */
+		//pushNotificationInit(store); 
+		function handleFirstConnectivityChange(isConnected) {
+	      NetInfo.isConnected.removeEventListener('change',handleFirstConnectivityChange);
+	    }
+	    NetInfo.isConnected.addEventListener('change',handleFirstConnectivityChange);
+	    NetInfo.isConnected.fetch().then(isConnected => {
 	      
-	//     });
-	// }
+	    });
+	}
 
 	// componentWillUnmount() {
 	// 	/* *

@@ -9,10 +9,13 @@
 import Login from "../containers/user/login";
 import Signup from "../containers/user/signup";
 import Home from "../containers/home/home";
-
+import Loader from "../components/common/Loader";
+import ViewStylist from "../containers/booking/viewStylist";
 // export list of routes.
 export default routes = {
-	Signup : { screen: Signup },
-	Home   : { screen: Home },
-	Login  : { screen: Login },
+	Home        : { screen: Home },
+	Login       : { screen: Login },
+	Signup      : { screen: Signup },
+	Loader      : { screen: Loader },
+	ViewStylist : { screen: ViewStylist }
 };

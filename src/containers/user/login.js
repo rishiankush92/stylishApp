@@ -15,37 +15,116 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
+//import { LoginManager,AccessToken } from 'react-native-fbsdk';
 // const FBSDK = require('react-native-fbsdk');
 // const {
 //   LoginButton,
 //   AccessToken
 // } = FBSDK;
+
 import Constants from '../../constants';
 import Background from '../../components/common/Background';
 import BackIcon from '../../components/common/BackButton';
 import FormTextInput from '../../components/common/FormTextInput';
 import FormSubmitButton from '../../components/common/SubmitButton';
+import _ from 'lodash';
+import { ToastActionsCreators } from 'react-native-redux-toast';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as UserActions from '../../redux/modules/user';
+import Regex from '../../utilities/Regex';
 
-export default class Login extends Component<{}> {
+class Login extends Component<{}> {
   constructor(props){
     super(props);
     this.state={
-      username:'',
+      email:'',
       password:''
     }
   }
 
+  signInWithoutFb(){
+    let context = this;
+    let { email, password } = this.state;
+    let { enterEmail, enterValidEmail, enterPassword, enterValidPassword } = Constants.i18n.common;
+    let { navigate, dispatch } = this.props.navigation;
+
+    if(_.isEmpty(email.trim())) {
+      alert(enterEmail);
+      return;
+    }
+    if(!Regex.validateEmail(email.trim()) && !Regex.validateMobile(email.trim())) {
+      alert(enterValidEmail);
+      return;
+    }
+
+    if(_.isEmpty(password)) {
+      alert(enterPassword);
+      return;
+    }
+
+    if(!Regex.validatePassword(password)){
+      alert(enterValidPassword);
+      return;
+    }
+    console.log(this.props)
+    this.props.UserActions.loginRestAPI({...this.state});  
+  }
+
+  // _fbAuth() {
+  //   LoginManager.logInWithReadPermissions(['public_profile','email']).then(function(result) {
+  //     if (result.isCancelled) {
+  //       console.log("Login Cancelled");
+  //     } else {
+  //       console.log('testttt',result)
+  //       AccessToken.getCurrentAccessToken().then((data) => {
+        
+  //         const { accessToken } = data
+  //         console.log('acccccc--',data.accessToken)
+  //         console.log('gadasdhsah')
+  //         fetch('https://graph.facebook.com/v2.5/me?fields=email,name&access_token=' + data.accessToken)
+  //         .then((response) => response.json())
+  //         .then((json) => {
+  //           // Some user object has been set up somewhere, build that user here
+  //           user.name = json.name
+  //           user.id = json.id
+  //           user.user_friends = json.friends
+  //           user.email = json.email
+  //           user.username = json.name
+  //           user.loading = false
+  //           user.loggedIn = true
+  //           user.avatar = setAvatar(json.id)   
+  //           console.log('asdsfds fdsf fsdsfdsfdsf',user.name)   
+  //         })
+  //         .catch(() => {
+  //           reject('ERROR GETTING DATA FROM FACEBOOK')
+  //         })
+
+  //       })
+      
+  //       console.log("Login Success permission granted:" + result.grantedPermissions);
+  //     }
+  //   }, function(error) {
+  //      console.log("some error occurred!!");
+  //   })
+  // }
+  // initUser(token) {
+   
+  // }
+  
   render() {
     return (
       <View style={styles.container}>
-        <BackIcon />
+        <BackIcon navigation={this.props.navigation}/>
         <Background />
         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}  keyboardDismissMode='on-drag' keyboardShouldPersistTaps='always' ref='mainScrollView'>
           <View style={styles.inputView}>
             <FormTextInput 
-              imageSource={Constants.Images.user.username}
-              placeHolderText={Constants.i18n.common.username}
-              onChangeText={(username)=>this.setState({username})}
+              imageSource={Constants.Images.user.email}
+              placeHolderText={Constants.i18n.common.email}
+              onChangeText={(email)=>this.setState({email})}
+              keyboard='email-address'
+              returnKey='next'
             />
             <FormTextInput 
               imageSource={Constants.Images.user.password}
@@ -54,12 +133,14 @@ export default class Login extends Component<{}> {
               secureText={true}
             />
             <FormSubmitButton 
+              _Press={()=>this.signInWithoutFb()}
               text={Constants.i18n.common.signin}
               style={styles.button}
             />
             <Text style={styles.orText}>{Constants.i18n.common.or}</Text>
             <View style={styles.socialIcons}>
               <TouchableOpacity>
+              
                 <Image source={Constants.Images.user.facebook} style={styles.fbImg} resizeMode='stretch'/>
               </TouchableOpacity>
               <TouchableOpacity>
@@ -67,7 +148,7 @@ export default class Login extends Component<{}> {
               </TouchableOpacity>
             </View>
             <View style={styles.noAccountView}>
-              <Text style={styles.noAccountText}>{Constants.i18n.signin.noAccount}<Text style={styles.signupText}> {Constants.i18n.common.signup}</Text></Text>
+              <Text style={styles.noAccountText}>{Constants.i18n.signin.noAccount}<Text onPress={()=>this.props.navigation.navigate('Signup')} style={styles.signupText}> {Constants.i18n.common.signup}</Text></Text>
             </View>
           </View>
         </ScrollView>
@@ -114,3 +195,9 @@ const styles = StyleSheet.create({
     fontWeight:'bold'
   }
 });
+
+const mapDispatchToProps = dispatch => ({
+  UserActions: bindActionCreators(UserActions, dispatch)
+});
+
+export default connect(null, mapDispatchToProps)(Login);

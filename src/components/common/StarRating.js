@@ -24,8 +24,8 @@ export default class StarRating extends Component {
       max: this.props.max ? this.props.max : 5,
       iconWidth: this.props.iconWidth? this.props.iconWidth:Platform.OS==="ios"?(Constants.BaseStyle.DEVICE_HEIGHT / 100 * 1.8):(Constants.BaseStyle.DEVICE_HEIGHT / 100 * 1.8),
       iconHeight: this.props.iconHeight? this.props.iconHeight: Platform.OS==="ios"?(Constants.BaseStyle.DEVICE_HEIGHT / 100 * 1.8):(Constants.BaseStyle.DEVICE_HEIGHT / 100 * 1.8),
-      iconSelected: this.props.iconSelected? this.props.iconSelected: Constants.Images.caterer.star_green_rateuser,
-      iconUnselected: this.props.iconUnselected? this.props.iconUnselected: Constants.Images.caterer.star_gray_rateuser,
+      iconSelected: this.props.iconSelected? this.props.iconSelected: Constants.Images.rating.enabledRating,
+      iconUnselected: this.props.iconUnselected? this.props.iconUnselected: Constants.Images.rating.disabledRating,
       editable: this.props.editable != null ? this.props.editable : true
     };
   }

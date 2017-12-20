@@ -21,14 +21,23 @@ import Constants from '../../constants';
 import Background from '../../components/common/Background';
 import Filters from '../../components/common/Filters';
 import StylishList from './stylishList';
+import StarRating from '../../components/common/StarRating';
+import Idx from "../../utilities/Idx";
+
 //import Calendar from 'react-native-calendar';
 
-export default class HomeScreen extends Component<{}> {
+export default class Home extends Component<{}> {
   constructor(props){
     super(props);
     this.state = {
       selected: 'distance',
       isChecked: 'fifty'
+    }
+    this.isLoggedIn = false;
+    if (Idx(this.props, _ => _.user.userDetails.auth.token)) {
+      this.isLoggedIn = true;
+      this.userToken = this.props.user.userDetails.auth.token;
+      this.userId = this.props.user.userDetails.userId;
     }
   }
 
@@ -48,7 +57,27 @@ export default class HomeScreen extends Component<{}> {
     this.setState({selected:'calender'})
   }
 
+  checkUserStatus(){
+    if(this.isLoggedIn){
+      this.props.navigation.navigate("Notifications");
+    }else{
+      Alert.alert(
+        "Sign in Required",
+        "Please sign in to use this feature.",
+        [
+          {text: 'Cancel',  onPress: () => console.log('Cancel Pressed')},
+          {text: 'Sign in', onPress: () =>{ this.props.navigation.navigate("Login", { 
+            userType: "customer",
+            initialIndex:1
+          })}},
+        ],
+      { cancelable: false }
+      )
+    }
+  }
+
   render() {
+    console.log(this.props)
     return (
       <View style={styles.container}>
         <Image source={Constants.Images.home.userProfileImg} style={styles.userImg} resizeMode='stretch' />
@@ -96,7 +125,7 @@ export default class HomeScreen extends Component<{}> {
             </TouchableOpacity>
           </View>
         }
-        <StylishList />
+        <StylishList isLoggedIn={this.isLoggedIn} navigation={this.props.navigation}/>
       </View>
     );
   }

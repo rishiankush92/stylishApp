@@ -32,7 +32,7 @@ class RestClient {
     static post(url, params, token = '',userId='') {
         let context = this,
             logintoken;
-            console.log('url *** ',Connection.getResturl() + url)
+            console.log('url *** ',Connection.getResturl() + url,token,userId)
         return new Promise(function(fulfill, reject) {
             context.isConnected().then(() => {
                     console.log("url=> ",Connection.getResturl() + url ," requestObject=> ",params, " x-auth-token => ",token, " x-user-id => ",userId )
@@ -42,8 +42,10 @@ class RestClient {
                             headers: {
                                 Accept: "application/json",
                                 "Content-Type": "application/json",
-                                "x-auth-token": token,
-                                "x-user-id": userId
+                                "device_latitude":30.704649,
+                                "device_longitude":76.717873,
+                                "device_type":"ios",
+                                "device_id":"test"
                             },
                             body: JSON.stringify(params)
                         }).then((response) => {
@@ -52,7 +54,8 @@ class RestClient {
                         .then(responseText => {
                             console.log('responseText*****',responseText);
                             fulfill(JSON.parse(responseText));
-                        }).catch(error => {
+                        })
+                        .catch(error => {
                             fulfill({message:'Please check your internet connectivity or our server is not responding.'});
                             console.warn("eroro",error);
                         });

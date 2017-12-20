@@ -1,8 +1,8 @@
 /*
  * @file: user.js
  * @description: User Reducer handles authentication, forgot password, change password apis.
- * @date: 10.07.2017
- * @author: Manish Budhiraja
+ * @date: 19.12.2017
+ * @author: Ankush Rishi
  * */
  'use strict';
 import {
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import _ from "lodash";
 import { startLoading, stopLoading, showToast, hideToast } from './app';
-//import { goBack, reset } from './nav';
+import { goBack, reset } from './nav';
 //import { selectLocation } from './location';
 import RestClient from '../../utilities/RestClient';
 import { ToastActionsCreators } from 'react-native-redux-toast';
@@ -20,11 +20,11 @@ import { ToastActionsCreators } from 'react-native-redux-toast';
 
 // Actions
 export const NEW_CONSUMER_USER      = "NEW_CONSUMER_USER";
-export const LOG_IN                 = "LOGIN";
 //export const LOG_OUT                = "LOGOUT";
 export const DEVICE_TOKEN           = "DEVICE_TOKEN";
 //export const RATINGS                = "RATINGS";
 export const GET_DETAILS            = "GET_DETAILS";
+export const LOG_IN_SUCCESS         = "LOG_IN_SUCCESS";
 
 // Action Creators
 export const CONSUMER_SIGNUP = (data) => ({ type: NEW_CONSUMER_USER,data});
@@ -42,23 +42,52 @@ export const consumerSignup = (data) => {
   let requestObject = {
     full_name  : data.fullName,
     email     : data.email,
-    phoneNum  : data.mobile,
+    mobile_number  : data.phoneNum,
     password  : data.password,
+    user_type : "customer"
+  }
+
+  console.log()
+
+  return dispatch => {
+    dispatch(startLoading());
+    RestClient.post("signup",requestObject).then((result) => {
+      if(result){
+        dispatch(stopLoading());
+        dispatch(ToastActionsCreators.displayInfo(result.msg));
+        dispatch(CONSUMER_SIGNUP({...data, source: "signup"}));
+      }else{
+        dispatch(stopLoading());
+        dispatch(ToastActionsCreators.displayInfo(result.msg));
+      }
+    }).catch(error => {
+      console.log("error=> " ,error)
+      dispatch(stopLoading());
+    });
+  }
+};
+
+/**
+* Login API
+*/
+export const loginRestAPI = (data) => {
+
+  let requestObject = {
+    email: data.email,
+    password: data.password
   }
 
   return dispatch => {
     dispatch(startLoading());
-    RestClient.post("/signup",requestObject).then((result) => {
-      console.log('result ******** ',result)
-      // if(result.statusCode==200){
-      //   console.log('result ******** ',result)
-      //   dispatch(stopLoading());
-      //   dispatch(ToastActionsCreators.displayInfo(result.msg));
-      //   dispatch(CONSUMER_SIGNUP({...data, source: "signup"}));
-      // }else{
-      //   dispatch(stopLoading());
-      //   dispatch(ToastActionsCreators.displayInfo(result.msg));
-      // }
+    RestClient.post("login",requestObject).then((result) => {
+      console.log('result ****** ',result)
+      if(result.statusCode == 200){
+        dispatch(stopLoading());
+        dispatch(LOG_SUCCESS(result));
+      }else{
+        dispatch(stopLoading());
+        dispatch(ToastActionsCreators.displayInfo(result.msg));
+      }
     }).catch(error => {
       console.log("error=> " ,error)
       dispatch(stopLoading());
