@@ -87,7 +87,6 @@ export default class ChefTabComponent extends Component {
 
 const styles = StyleSheet.create({
   listContainer: {
-    borderWidth:1,
     backgroundColor:'#292E27',
     marginHorizontal: Constants.BaseStyle.DEVICE_WIDTH/100 * 6,
     marginVertical: Constants.BaseStyle.DEVICE_HEIGHT/100 * 1.5

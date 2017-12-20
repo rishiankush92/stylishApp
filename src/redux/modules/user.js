@@ -81,7 +81,7 @@ export const loginRestAPI = (data) => {
     dispatch(startLoading());
     RestClient.post("login",requestObject).then((result) => {
       console.log('result ****** ',result)
-      if(result.statusCode == 200){
+      if(result.status === '200'){
         dispatch(stopLoading());
         dispatch(LOG_SUCCESS(result));
       }else{

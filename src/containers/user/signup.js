@@ -115,7 +115,7 @@ class Signup extends Component<{}> {
     // dispatch(ToastActionsCreators.displayInfo('hello'));
     return (
       <View style={styles.container}>
-        <BackIcon />
+        <BackIcon navigation={this.props.navigation}/>
         <Background />
         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}  keyboardDismissMode='on-drag' keyboardShouldPersistTaps='always' ref='mainScrollView'>
           <View style={styles.inputView}>
@@ -156,7 +156,7 @@ class Signup extends Component<{}> {
             />
             
             <View style={styles.alreadyAccountView}>
-              <Text style={styles.alreadyAccountText}>{Constants.i18n.signup.accountAlready}<Text style={styles.signupText}> {Constants.i18n.common.signin}</Text></Text>
+              <Text style={styles.alreadyAccountText}>{Constants.i18n.signup.accountAlready}<Text onPress={()=>this.props.navigation.goBack()} style={styles.signupText}> {Constants.i18n.common.signin}</Text></Text>
             </View>
           </View>
         </ScrollView>

@@ -1,8 +1,8 @@
 /*
  * @file: index.js
  * @description: App's root file to connect redux store with app
- * @date: 21.06.2017
- * @author: Manish Budhiraja
+ * @date: 20.12.2017
+ * @author: Ankush Rishi
  * */
 import React, { Component } from "react";
 import { Alert, NetInfo } from "react-native";

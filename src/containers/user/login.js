@@ -113,6 +113,7 @@ class Login extends Component<{}> {
   // }
   
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <BackIcon navigation={this.props.navigation}/>
@@ -148,7 +149,7 @@ class Login extends Component<{}> {
               </TouchableOpacity>
             </View>
             <View style={styles.noAccountView}>
-              <Text style={styles.noAccountText}>{Constants.i18n.signin.noAccount}<Text onPress={()=>this.props.navigation.navigate('Signup')} style={styles.signupText}> {Constants.i18n.common.signup}</Text></Text>
+              <Text style={styles.noAccountText}>{Constants.i18n.signin.noAccount}<Text onPress={()=>{navigate('Signup')}} style={styles.signupText}> {Constants.i18n.common.signup}</Text></Text>
             </View>
           </View>
         </ScrollView>

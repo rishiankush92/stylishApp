@@ -23,6 +23,7 @@ import Filters from '../../components/common/Filters';
 import StylishList from './stylishList';
 import StarRating from '../../components/common/StarRating';
 import Idx from "../../utilities/Idx";
+import * as locationActions from "../../redux/modules/location";
 
 //import Calendar from 'react-native-calendar';
 
@@ -31,7 +32,8 @@ export default class Home extends Component<{}> {
     super(props);
     this.state = {
       selected: 'distance',
-      isChecked: 'fifty'
+      isChecked: 'fifty',
+      isRefreshing: false,
     }
     this.isLoggedIn = false;
     if (Idx(this.props, _ => _.user.userDetails.auth.token)) {
@@ -39,6 +41,11 @@ export default class Home extends Component<{}> {
       this.userToken = this.props.user.userDetails.auth.token;
       this.userId = this.props.user.userDetails.userId;
     }
+  }
+
+  componentDidMount(){
+    this.setState({isRefreshing:true});
+    //this.getData(true);
   }
 
   distanceFilter(){
@@ -56,6 +63,102 @@ export default class Home extends Component<{}> {
   calenderFilter(){
     this.setState({selected:'calender'})
   }
+
+  // getData(isIntialLoad){
+  //   let context = this;
+  //   if(isIntialLoad){
+  //     context.setTimeout(()=>{
+  //       if(context.props.location.currentLocation != null){
+  //         let requestObject = {
+  //           position:{
+  //             lat : context.props.location.currentLocation.position.lat,
+  //             long : context.props.location.currentLocation.position.lng,
+  //             address : context.props.location.currentLocation.formattedAddress
+  //           },
+  //           role : 1,
+  //           starts_on: context.state.starts_on,
+  //           ends_on: context.state.ends_on,
+  //           skip:context.state.skip,
+  //           limit:context.state.limit
+  //         }
+  //         context.setState({
+  //           position:{
+  //             lat : context.props.location.currentLocation.position.lat,
+  //             long : context.props.location.currentLocation.position.lng,
+  //             address : context.props.location.currentLocation.formattedAddress
+  //           }
+  //         });
+  //         context.props.bookingActions.chefList(requestObject,function(count) {
+  //           context.isEndReached = false;
+  //           if(count){
+  //             context.setState({
+  //               total:count,
+  //               isFooterVisible:false,
+  //               isRefreshing:false
+  //             });
+  //           }else{
+  //             context.setState({
+  //               isFooterVisible:false,
+  //               isRefreshing:false
+  //             });
+  //           }
+  //         });
+  //       }else{
+  //         if(context.props.location.isError){
+  //           context.setState({
+  //             isFooterVisible:false,
+  //             isRefreshing:false,
+  //             isLocationEnabled:false
+  //           });
+  //           context.setTimeout(()=>{
+  //             Alert.alert(
+  //               "Location Permissions", 
+  //               "We need to access your location. Please go to Settings > Privacy > Location to allow Upstrom to access your location.", 
+  //               [{
+  //                 text: "Enable",
+  //                 onPress:()=>{Permissions.openSettings()}
+  //               },{
+  //                 text: "Cancel",
+  //                 onPress:()=>{console.log("Cancel")}
+  //               }],
+  //               {cancelable: false}
+  //             );
+  //           },700);
+  //         }else{
+  //           context.getData(true);
+  //         }
+  //       }
+  //     },500);
+  //   }else{
+  //     let requestObject = {
+  //       position:{
+  //         lat : context.state.position.lat,
+  //         long : context.state.position.long,
+  //         address : context.state.position.address,
+  //       },
+  //       role : 1,
+  //       starts_on: context.state.starts_on,
+  //       ends_on: context.state.ends_on,
+  //       skip:context.state.skip,
+  //       limit:context.state.limit
+  //     }
+  //     context.props.bookingActions.chefList(requestObject,function(count) {
+  //       context.isEndReached = false;
+  //       if(count){
+  //         context.setState({
+  //           total:count,
+  //           isFooterVisible:false,
+  //           isRefreshing:false
+  //         });
+  //       }else{
+  //         context.setState({
+  //           isFooterVisible:false,
+  //           isRefreshing:false
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
 
   checkUserStatus(){
     if(this.isLoggedIn){
@@ -77,7 +180,7 @@ export default class Home extends Component<{}> {
   }
 
   render() {
-    console.log(this.props)
+    console.log('props ********* ',this.props)
     return (
       <View style={styles.container}>
         <Image source={Constants.Images.home.userProfileImg} style={styles.userImg} resizeMode='stretch' />
