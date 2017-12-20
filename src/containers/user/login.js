@@ -16,6 +16,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { LoginManager,AccessToken } from 'react-native-fbsdk';
+import InstagramLogin from 'react-native-instagram-login'
 // const FBSDK = require('react-native-fbsdk');
 // const {
 //   LoginButton,
@@ -43,26 +44,24 @@ export default class Login extends Component<{}> {
       } else {
         console.log('testttt',result)
         AccessToken.getCurrentAccessToken().then((data) => {
-        
-          const { accessToken } = data
-          console.log('acccccc--',data.accessToken)
-          console.log('gadasdhsah')
-          fetch('https://graph.facebook.com/v2.5/me?fields=email,name&access_token=' + data.accessToken)
+      
+          fetch('https://graph.facebook.com/v2.11/me?fields=email,name&access_token=' + data.accessToken.toString())
           .then((response) => response.json())
           .then((json) => {
+            console.log('sdfda12143546546',json.email)
+            
             // Some user object has been set up somewhere, build that user here
-            user.name = json.name
-            user.id = json.id
-            user.user_friends = json.friends
-            user.email = json.email
-            user.username = json.name
-            user.loading = false
-            user.loggedIn = true
-            user.avatar = setAvatar(json.id)   
-            console.log('asdsfds fdsf fsdsfdsfdsf',user.name)   
+            // user.name = json.name
+            // user.id = json.id
+            // user.user_friends = json.friends
+            // user.email = json.email
+            // user.username = json.name
+            // user.loading = false
+            // user.loggedIn = true
+            // user.avatar = setAvatar(json.id)   
           })
           .catch(() => {
-            reject('ERROR GETTING DATA FROM FACEBOOK')
+            
           })
 
         })
@@ -73,10 +72,13 @@ export default class Login extends Component<{}> {
        console.log("some error occurred!!");
     })
   }
-  initUser(token) {
-   
+  _instagramLogin() {
+  
+
   }
   
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -105,10 +107,21 @@ export default class Login extends Component<{}> {
               
                 <Image source={Constants.Images.user.facebook} style={styles.fbImg} resizeMode='stretch'/>
               </TouchableOpacity>
-              <TouchableOpacity>
+
+              <TouchableOpacity onPress={()=> this.refs.instagramLogin.show()} >
                 <Image source={Constants.Images.user.instagram} style={styles.fbImg} resizeMode='stretch'/>
               </TouchableOpacity>
+              
             </View>
+
+  <InstagramLogin
+    ref='instagramLogin'
+    clientId='99d144c0fa5044c0abc9c53f03fa56f0'
+    scopes={['public_content', 'follower_list']}
+    onLoginSuccess={(token) => this.setState({ token })}
+/>
+
+
             <View style={styles.noAccountView}>
               <Text style={styles.noAccountText}>{Constants.i18n.signin.noAccount}<Text style={styles.signupText}> {Constants.i18n.common.signup}</Text></Text>
             </View>
