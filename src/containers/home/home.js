@@ -24,18 +24,34 @@ import StylishList from './stylishList';
 import StarRating from '../../components/common/StarRating';
 import Idx from "../../utilities/Idx";
 import * as locationActions from "../../redux/modules/location";
-
+import * as userActions from "../../redux/modules/user";
+import * as bookingActions from "../../redux/modules/bookings";
+import { ToastActionsCreators } from 'react-native-redux-toast';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 //import Calendar from 'react-native-calendar';
-
-export default class Home extends Component<{}> {
+import ReactMixin from "react-mixin";
+import TimerMixin from "react-timer-mixin";
+class Home extends Component<{}> {
   constructor(props){
     super(props);
     this.state = {
       selected: 'distance',
       isChecked: 'fifty',
+      skip:0,
+      limit:10,
+      total:0,
       isRefreshing: false,
+      isFooterVisible : false,
+      position : {
+        lat : 0,
+        long : 0,
+        address : ""
+      },
+      isLocationEnabled : true,
     }
     this.isLoggedIn = false;
+    this.isEndReached = false;
     if (Idx(this.props, _ => _.user.userDetails.auth.token)) {
       this.isLoggedIn = true;
       this.userToken = this.props.user.userDetails.auth.token;
@@ -45,7 +61,7 @@ export default class Home extends Component<{}> {
 
   componentDidMount(){
     this.setState({isRefreshing:true});
-    //this.getData(true);
+    this.getData(true);
   }
 
   distanceFilter(){
@@ -64,105 +80,104 @@ export default class Home extends Component<{}> {
     this.setState({selected:'calender'})
   }
 
-  // getData(isIntialLoad){
-  //   let context = this;
-  //   if(isIntialLoad){
-  //     context.setTimeout(()=>{
-  //       if(context.props.location.currentLocation != null){
-  //         let requestObject = {
-  //           position:{
-  //             lat : context.props.location.currentLocation.position.lat,
-  //             long : context.props.location.currentLocation.position.lng,
-  //             address : context.props.location.currentLocation.formattedAddress
-  //           },
-  //           role : 1,
-  //           starts_on: context.state.starts_on,
-  //           ends_on: context.state.ends_on,
-  //           skip:context.state.skip,
-  //           limit:context.state.limit
-  //         }
-  //         context.setState({
-  //           position:{
-  //             lat : context.props.location.currentLocation.position.lat,
-  //             long : context.props.location.currentLocation.position.lng,
-  //             address : context.props.location.currentLocation.formattedAddress
-  //           }
-  //         });
-  //         context.props.bookingActions.chefList(requestObject,function(count) {
-  //           context.isEndReached = false;
-  //           if(count){
-  //             context.setState({
-  //               total:count,
-  //               isFooterVisible:false,
-  //               isRefreshing:false
-  //             });
-  //           }else{
-  //             context.setState({
-  //               isFooterVisible:false,
-  //               isRefreshing:false
-  //             });
-  //           }
-  //         });
-  //       }else{
-  //         if(context.props.location.isError){
-  //           context.setState({
-  //             isFooterVisible:false,
-  //             isRefreshing:false,
-  //             isLocationEnabled:false
-  //           });
-  //           context.setTimeout(()=>{
-  //             Alert.alert(
-  //               "Location Permissions", 
-  //               "We need to access your location. Please go to Settings > Privacy > Location to allow Upstrom to access your location.", 
-  //               [{
-  //                 text: "Enable",
-  //                 onPress:()=>{Permissions.openSettings()}
-  //               },{
-  //                 text: "Cancel",
-  //                 onPress:()=>{console.log("Cancel")}
-  //               }],
-  //               {cancelable: false}
-  //             );
-  //           },700);
-  //         }else{
-  //           context.getData(true);
-  //         }
-  //       }
-  //     },500);
-  //   }else{
-  //     let requestObject = {
-  //       position:{
-  //         lat : context.state.position.lat,
-  //         long : context.state.position.long,
-  //         address : context.state.position.address,
-  //       },
-  //       role : 1,
-  //       starts_on: context.state.starts_on,
-  //       ends_on: context.state.ends_on,
-  //       skip:context.state.skip,
-  //       limit:context.state.limit
-  //     }
-  //     context.props.bookingActions.chefList(requestObject,function(count) {
-  //       context.isEndReached = false;
-  //       if(count){
-  //         context.setState({
-  //           total:count,
-  //           isFooterVisible:false,
-  //           isRefreshing:false
-  //         });
-  //       }else{
-  //         context.setState({
-  //           isFooterVisible:false,
-  //           isRefreshing:false
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
+  getData(isIntialLoad){
+    // console.log('initial load ******** ',isIntialLoad)
+    let context = this;
+    // if(isIntialLoad){
+    //   context.setTimeout(()=>{
+    //     if(context.props.location.currentLocation != null){
+    //       let requestObject = {
+    //         position:{
+    //           lat : context.props.location.currentLocation.position.lat,
+    //           long : context.props.location.currentLocation.position.lng,
+    //           address : context.props.location.currentLocation.formattedAddress
+    //         },
+    //         role : 1,
+    //         starts_on: context.state.starts_on,
+    //         ends_on: context.state.ends_on,
+    //         skip:context.state.skip,
+    //         limit:context.state.limit
+    //       }
+    //       context.setState({
+    //         position:{
+    //           lat : context.props.location.currentLocation.position.lat,
+    //           long : context.props.location.currentLocation.position.lng,
+    //           address : context.props.location.currentLocation.formattedAddress
+    //         }
+    //       });
+    //       context.props.bookingActions.stylistList(requestObject,function(count) {
+    //         context.isEndReached = false;
+    //         if(count){
+    //           context.setState({
+    //             total:count,
+    //             isFooterVisible:false,
+    //             isRefreshing:false
+    //           });
+    //         }else{
+    //           context.setState({
+    //             isFooterVisible:false,
+    //             isRefreshing:false
+    //           });
+    //         }
+    //       });
+    //     }else{
+    //       if(context.props.location.isError){
+    //         context.setState({
+    //           isFooterVisible:false,
+    //           isRefreshing:false,
+    //           isLocationEnabled:false
+    //         });
+    //         context.setTimeout(()=>{
+    //           Alert.alert(
+    //             "Location Permissions", 
+    //             "We need to access your location. Please go to Settings > Privacy > Location to allow Stylist to access your location.", 
+    //             [{
+    //               text: "Enable",
+    //               onPress:()=>{Permissions.openSettings()}
+    //             },{
+    //               text: "Cancel",
+    //               onPress:()=>{console.log("Cancel")}
+    //             }],
+    //             {cancelable: false}
+    //           );
+    //         },700);
+    //       }else{
+    //         context.getData(true);
+    //       }
+    //     }
+    //   },500);
+    // }else{
+      let requestObject = {
+        // position:{
+        //   lat : context.state.position.lat,
+        //   long : context.state.position.long,
+        //   address : context.state.position.address,
+        // },
+        //user_type : "stylist",
+        skip:context.state.skip,
+        limit:context.state.limit
+      }
+      context.props.bookingActions.stylistList(requestObject,function(count) {
+        context.isEndReached = false;
+        if(count){
+          context.setState({
+            total:count,
+            isFooterVisible:false,
+            isRefreshing:false
+          });
+        }else{
+          context.setState({
+            isFooterVisible:false,
+            isRefreshing:false
+          });
+        }
+      });
+   // }
+  }
 
   checkUserStatus(){
     if(this.isLoggedIn){
-      this.props.navigation.navigate("Notifications");
+      this.props.navigation.navigate("Home");
     }else{
       Alert.alert(
         "Sign in Required",
@@ -179,8 +194,41 @@ export default class Home extends Component<{}> {
     }
   }
 
+  /**
+  * onRefresh
+  */
+
+  stylistListRefresh(){
+    let context = this;
+      context.setState({skip:0,isRefreshing:true});
+    // if(context.props.location.isError){
+    //   checkPermissions({
+    //     dispatch : context.props.navigation.dispatch
+    //   });
+      context.setTimeout(()=>context.getData(false),1000);
+    // }else{
+    //   context.setTimeout(()=>context.getData(false),1000);
+    // }
+  }
+
+  /**
+  * onEndReached
+  */
+
+  stylistListonReachedEnd(){
+    let context = this;
+    if(!context.isEndReached  && context.state.skip<context.state.total){
+      context.isEndReached = true;
+      context.setState({
+        skip:context.state.skip+10,
+        isFooterVisible : true
+      });
+      context.setTimeout(()=>context.getData(false),1000);
+    }
+  }
+
   render() {
-    console.log('props ********* ',this.props)
+    //console.log('props ********* ',this.props)
     return (
       <View style={styles.container}>
         <Image source={Constants.Images.home.userProfileImg} style={styles.userImg} resizeMode='stretch' />
@@ -228,7 +276,17 @@ export default class Home extends Component<{}> {
             </TouchableOpacity>
           </View>
         }
-        <StylishList isLoggedIn={this.isLoggedIn} navigation={this.props.navigation}/>
+        <StylishList
+            {...this.props}
+            isLoggedIn = {this.isLoggedIn}
+            //data = {this.props.bookings.stylistList.length!==0 ? this.props.bookings.stylistList :  null}
+            stylistListRefresh={()=>this.stylistListRefresh()}
+            stylistListonReachedEnd={()=>this.stylistListonReachedEnd()}
+            isRefreshing = {this.state.isRefreshing}
+            isFooterVisible = {this.state.isFooterVisible}
+            onCancel={() => this.cancelChefCal()}
+
+        />
       </View>
     );
   }
@@ -269,3 +327,18 @@ const styles = StyleSheet.create({
 
 });
 
+ReactMixin(Home.prototype, TimerMixin);
+
+const mapStateToProps = state => ({
+  user: state.user,
+  location: state.location,
+  bookings: state.bookings,
+});
+
+const mapDispatchToProps = dispatch => ({
+  locationActions     : bindActionCreators(locationActions, dispatch),
+  userActions         : bindActionCreators(userActions, dispatch),
+  bookingActions      : bindActionCreators(bookingActions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

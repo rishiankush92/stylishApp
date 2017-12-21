@@ -18,6 +18,7 @@ import {
 import _ from 'lodash';
 import Constants from '../../constants';
 import HomeScreenListing from '../../components/home/HomeScreenListing';
+import NoRecord from "../../components/common/NoRecord";
 
 export default class StylishList extends Component {
   constructor(props){
@@ -62,21 +63,22 @@ export default class StylishList extends Component {
   }
 
   render(){
+    //console.log('props ********* ',this.props.data)
   	return(
       <View style={[styles.container]}>
         <FlatList
-          data={[{key: 'a'}, {key: 'b'}]}
-          //onRefresh={()=>this.props.chefListRefresh()}
-          //refreshing={this.props.isRefreshing}
-          //onEndReachedThreshold={0.8}
-          //onEndReached={()=>this.props.chefListonReachedEnd()}
-          //keyExtractor={(item, index)=>this._keyExtractor(item, index)}
+          data={this.props.data}
+          onRefresh={()=>this.props.stylistListRefresh()}
+          refreshing={this.props.isRefreshing}
+          onEndReachedThreshold={0.8}
+          onEndReached={()=>this.props.stylistListonReachedEnd()}
+          keyExtractor={(item, index)=>this._keyExtractor(item, index)}
           enableEmptySections={true}
           renderItem={this.renderItem}
-          //ListFooterComponent={this.renderFooter}
+          ListFooterComponent={this.renderFooter}
           showsHorizontalScrollIndicator={true}
           showsVerticalScrollIndicator={true}
-          //ListEmptyComponent={()=><NoRecord />}
+          ListEmptyComponent={()=><NoRecord />}
         />
       </View>  
   	)

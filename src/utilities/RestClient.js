@@ -116,8 +116,10 @@ class RestClient {
                             headers: {
                                 "Accept": "application/json",
                                 "Content-Type": "application/json",
-                                "x-auth-token": token,
-                                "x-user-id": userId
+                                "device_latitude":30.704649,
+                                "device_longitude":76.717873,
+                               // "device_type":"ios",
+                                //"device_id":"test"
                             }
                         })
                         .then((response) => {
