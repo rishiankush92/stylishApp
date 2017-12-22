@@ -32,7 +32,7 @@ export const LOG_SUCCESS = (data) => ({ type: LOG_IN_SUCCESS,data});
 //export const LOG_OUT_SUCCESS = () => ({ type: LOG_OUT});
 export const setDeviceToken = (data) => ({type:DEVICE_TOKEN,data});
 //export const setRatings = (data) => ({type:RATINGS, data});
-//export const getDetails = (data) => ({type:GET_DETAILS , data});
+export const getDetails = (data) => ({type:GET_DETAILS , data});
 export const getStylist = (data) => ({type: GET_STYLIST_LIST,data});
 /**
 * Consumer Signup API.
@@ -80,10 +80,11 @@ export const loginRestAPI = (data) => {
   return dispatch => {
     dispatch(startLoading());
     RestClient.post("login",requestObject).then((result) => {
-      console.log('result ****** ',result)
+      //console.log('result ****** ',result)
       if(result.status === '200'){
         dispatch(stopLoading());
         dispatch(LOG_SUCCESS(result));
+        dispatch(getDetails(result));
       }else{
         dispatch(stopLoading());
         dispatch(ToastActionsCreators.displayInfo(result.msg));

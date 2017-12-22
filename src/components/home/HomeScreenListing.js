@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   View,
   Image,
-  Alert
+  Alert,
+  FlatList
 } from 'react-native';
 import Constants from '../../constants';
 import StarRating from '../common/StarRating';
@@ -19,8 +20,9 @@ export default class HomeScreenListing extends Component {
   }
 
   onItemPress(item){
+    //console.log('is logged in ******** ',this.props)
     if(this.props.isLoggedIn) {
-      this.props.navigation.navigate('ViewStylist', {userDetails: this.props.item});
+      this.props.navigation.navigate('ViewStylist', {itemDetails: this.props.item});
     }else{
       Alert.alert(
         "Sign in Required",
@@ -37,10 +39,21 @@ export default class HomeScreenListing extends Component {
     }
   }
 
+  renderImage(item) {
+    return(
+      <Image 
+        source={{ uri: Connection.getMedia()+item.item.image_name }}
+        style={styles.imageStyle} 
+        resizeMode='stretch'
+      />
+    )
+  }
+
   render(){
     let data = this.props.item;
-    //let imageThumbnails = _.pluck(data.thumbnail, image_name);
-    console.log('data ******* ',data)
+    let imageThumbnails = data.thumbnail;
+    //if (imageThumbnails.length > 4) {}
+    //console.log('data ******* ',data)
     return(
       <TouchableOpacity style={styles.listContainer}
         onPress={()=>{
@@ -73,21 +86,18 @@ export default class HomeScreenListing extends Component {
             </View>
             <View style={{flex:1}}>
               <Text style={styles.boldText}>Start From</Text>
-              <Text style={styles.desc}>$150</Text>
+              <Text style={styles.desc}>${data.starting_price}</Text>
             </View>
             <View style={{flex:1}}>
               <Text style={styles.boldText}>Distance</Text>
               <Text style={styles.desc}>{Math.round(data.distance * 100) / 100}{data.units}</Text>
             </View>
           </View>
-          <View style={[styles.imageContainer]}>
-            
-            <Image
-              style={styles.imageStyle}
-              source={{uri: Connection.getMedia()+data.picture}}
-            />
-            
-          </View>
+          <FlatList
+            horizontal={true}
+            data={data.thumbnail}
+            renderItem={this.renderImage}
+          />
         </View>
       </TouchableOpacity>
     )
@@ -135,10 +145,12 @@ const styles = StyleSheet.create({
     fontWeight: Constants.BaseStyle.BOLD,
   },
   imageContainer:{
+    flexDirection:'row',
     height: Constants.BaseStyle.DEVICE_WIDTH*21/100,
     width: Constants.BaseStyle.DEVICE_WIDTH*21/100,
   },
   imageStyle: {
+    marginHorizontal: Constants.BaseStyle.DEVICE_WIDTH*.8/100,
     height: Constants.BaseStyle.DEVICE_WIDTH*20/100,
     width: Constants.BaseStyle.DEVICE_WIDTH*20/100,
   }

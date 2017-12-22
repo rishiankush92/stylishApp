@@ -55,7 +55,7 @@ export default class StylishList extends Component {
     return(
       <HomeScreenListing 
         showStylist={this.props.showStylist}
-        //isLoggedIn={this.props.isLoggedIn}
+        isLoggedIn={this.props.isLoggedIn}
         navigation={this.props.navigation}
         item={item}
         //onCancel={this.props.onCancel}

@@ -54,9 +54,9 @@ export default function reducer(state = initialState, action) {
     switch (action.type) {
         case NEW_CONSUMER_USER:
             return AppNavigator.router.getStateForAction(
-                NavigationActions.navigate({
-                    routeName: "Signup",
-                    params: action.data
+                NavigationActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate({ routeName: "Home" })],
                 }),
                 state
             );

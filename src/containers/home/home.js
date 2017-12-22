@@ -52,10 +52,11 @@ class Home extends Component<{}> {
     }
     this.isLoggedIn = false;
     this.isEndReached = false;
-    if (Idx(this.props, _ => _.user.userDetails.auth.token)) {
+    //console.log('props ******** ',this.props)
+    if (Idx(this.props, _ => _.user.userDetails.token)) {
       this.isLoggedIn = true;
-      this.userToken = this.props.user.userDetails.auth.token;
-      this.userId = this.props.user.userDetails.userId;
+      this.userToken = this.props.user.userDetails.token;
+      //this.userId = this.props.user.userDetails.userId;
     }
   }
 
@@ -262,16 +263,16 @@ class Home extends Component<{}> {
         {this.state.selected == 'price' && 
           <View style={{flexDirection:'row',marginHorizontal:Constants.BaseStyle.DEVICE_WIDTH/100*3,marginVertical:Constants.BaseStyle.DEVICE_HEIGHT/100*3}}>
             <TouchableOpacity onPress={()=>this.setState({isChecked:'fifty'})} style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-              <Image source={this.state.isChecked == 'fifty' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:Constants.BaseStyle.DEVICE_HEIGHT/100*5,width:Constants.BaseStyle.DEVICE_WIDTH/100*8}} resizeMode='stretch'/>
-              {this.state.isChecked == 'fifty' ? <Text style={{color:'rgb(252, 228, 149)'}}>$50 - $100</Text> : <Text style={{color:'#494A48'}}>$50 - $100</Text>}
+              <Image source={this.state.isChecked == 'fifty' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:20,width:20}} resizeMode='stretch'/>
+              {this.state.isChecked == 'fifty' ? <Text style={{color:'rgb(252, 228, 149)'}}>$50 - $100</Text> : <Text style={{color:'#494A48'}}> $50 - $100</Text>}
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>this.setState({isChecked:'hundred'})} style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-              <Image source={this.state.isChecked == 'hundred' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:Constants.BaseStyle.DEVICE_HEIGHT/100*5,width:Constants.BaseStyle.DEVICE_WIDTH/100*8}} resizeMode='stretch'/>
-              {this.state.isChecked == 'hundred' ? <Text style={{color:'rgb(252, 228, 149)'}}>$100 - $150</Text> : <Text style={{color:'#494A48'}}>$100 - $150</Text>}
+              <Image source={this.state.isChecked == 'hundred' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:20,width:20}} resizeMode='stretch'/>
+              {this.state.isChecked == 'hundred' ? <Text style={{color:'rgb(252, 228, 149)'}}>$100 - $150</Text> : <Text style={{color:'#494A48'}}> $100 - $150</Text>}
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>this.setState({isChecked:'onefifty'})} style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-              <Image source={this.state.isChecked == 'onefifty' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:Constants.BaseStyle.DEVICE_HEIGHT/100*5,width:Constants.BaseStyle.DEVICE_WIDTH/100*8}} resizeMode='stretch'/>
-              {this.state.isChecked == 'onefifty' ? <Text style={{color:'rgb(252, 228, 149)'}}>$150 - $200</Text> : <Text style={{color:'#494A48'}}>$150 - $200</Text>}
+              <Image source={this.state.isChecked == 'onefifty' ? Constants.Images.home.radioCheck : Constants.Images.home.radioUncheck} style={{height:20,width:20}} resizeMode='stretch'/>
+              {this.state.isChecked == 'onefifty' ? <Text style={{color:'rgb(252, 228, 149)'}}>$150 - $200</Text> : <Text style={{color:'#494A48'}}> $150 - $200</Text>}
             </TouchableOpacity>
           </View>
         }

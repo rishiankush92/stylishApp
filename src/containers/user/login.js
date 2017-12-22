@@ -87,14 +87,14 @@ class Login extends Component<{}> {
             console.log('sdfda12143546546',json.email)
             
             // Some user object has been set up somewhere, build that user here
-            // user.name = json.name
-            // user.id = json.id
-            // user.user_friends = json.friends
-            // user.email = json.email
-            // user.username = json.name
-            // user.loading = false
-            // user.loggedIn = true
-            // user.avatar = setAvatar(json.id)   
+            user.name = json.name
+            user.id = json.id
+            user.user_friends = json.friends
+            user.email = json.email
+            user.username = json.name
+            user.loading = false
+            user.loggedIn = true
+            user.avatar = setAvatar(json.id)   
           })
           .catch(() => {
             
