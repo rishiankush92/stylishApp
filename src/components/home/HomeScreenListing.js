@@ -10,14 +10,15 @@ import {
 } from 'react-native';
 import Constants from '../../constants';
 import StarRating from '../common/StarRating';
-
-export default class ChefTabComponent extends Component {
+import Connection  from "../../config/Connection";
+import _ from 'lodash';
+export default class HomeScreenListing extends Component {
   constructor(props){
     super(props);
     this.onItemPress = this.onItemPress.bind(this);
   }
 
-  onItemPress(){
+  onItemPress(item){
     if(this.props.isLoggedIn) {
       this.props.navigation.navigate('ViewStylist', {userDetails: this.props.item});
     }else{
@@ -37,6 +38,9 @@ export default class ChefTabComponent extends Component {
   }
 
   render(){
+    let data = this.props.item;
+    //let imageThumbnails = _.pluck(data.thumbnail, image_name);
+    console.log('data ******* ',data)
     return(
       <TouchableOpacity style={styles.listContainer}
         onPress={()=>{
@@ -47,10 +51,10 @@ export default class ChefTabComponent extends Component {
         <View style={{marginHorizontal:Constants.BaseStyle.DEVICE_WIDTH/100 * 3,marginVertical: Constants.BaseStyle.DEVICE_HEIGHT/100 * 2}}>
           <View style={{flexDirection:'row'}}>
             <View style={{flex:1}}>
-              <Image source={Constants.Images.home.userProfileImg} style={styles.stylistImage} resizeMode='stretch'/>
+              <Image source={{uri: Connection.getMedia()+data.picture}} style={styles.stylistImage} resizeMode='stretch'/>
             </View>
             <View style={{flex:2}}>
-              <Text style={styles.username}>Jessica Hutchion</Text>
+              <Text style={styles.username}>{data.full_name}</Text>
               <Text style={styles.designation}>Stylist at Redbox Barber</Text>
             </View>
             <View style={{flex:2}}>
@@ -59,7 +63,7 @@ export default class ChefTabComponent extends Component {
               </View>
             </View>
           </View>
-          <View style={{flexDirection:'row'}}>
+          <View style={{flexDirection:'row',marginVertical:Constants.BaseStyle.DEVICE_HEIGHT/100 * 1.5}}>
             <View style={{flex:1}}>
               <Text style={styles.boldText}>Rating</Text>
               <StarRating
@@ -73,10 +77,15 @@ export default class ChefTabComponent extends Component {
             </View>
             <View style={{flex:1}}>
               <Text style={styles.boldText}>Distance</Text>
-              <Text style={styles.desc}>0.5mi</Text>
+              <Text style={styles.desc}>{Math.round(data.distance * 100) / 100}{data.units}</Text>
             </View>
           </View>
-          <View style={{flexDirection:'row'}}>
+          <View style={[styles.imageContainer]}>
+            
+            <Image
+              style={styles.imageStyle}
+              source={{uri: Connection.getMedia()+data.picture}}
+            />
             
           </View>
         </View>
@@ -124,5 +133,13 @@ const styles = StyleSheet.create({
   desc:{
     color: 'rgb(252, 228, 149)',
     fontWeight: Constants.BaseStyle.BOLD,
+  },
+  imageContainer:{
+    height: Constants.BaseStyle.DEVICE_WIDTH*21/100,
+    width: Constants.BaseStyle.DEVICE_WIDTH*21/100,
+  },
+  imageStyle: {
+    height: Constants.BaseStyle.DEVICE_WIDTH*20/100,
+    width: Constants.BaseStyle.DEVICE_WIDTH*20/100,
   }
 });

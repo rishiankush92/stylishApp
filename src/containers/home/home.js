@@ -25,7 +25,6 @@ import StarRating from '../../components/common/StarRating';
 import Idx from "../../utilities/Idx";
 import * as locationActions from "../../redux/modules/location";
 import * as userActions from "../../redux/modules/user";
-import * as bookingActions from "../../redux/modules/bookings";
 import { ToastActionsCreators } from 'react-native-redux-toast';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -49,6 +48,7 @@ class Home extends Component<{}> {
         address : ""
       },
       isLocationEnabled : true,
+      stylistBook: false,
     }
     this.isLoggedIn = false;
     this.isEndReached = false;
@@ -154,10 +154,10 @@ class Home extends Component<{}> {
         //   address : context.state.position.address,
         // },
         //user_type : "stylist",
-        skip:context.state.skip,
-        limit:context.state.limit
+        page:context.state.skip,
+        count:context.state.limit
       }
-      context.props.bookingActions.stylistList(requestObject,function(count) {
+      context.props.userActions.stylistList(requestObject,function(count) {
         context.isEndReached = false;
         if(count){
           context.setState({
@@ -228,7 +228,6 @@ class Home extends Component<{}> {
   }
 
   render() {
-    //console.log('props ********* ',this.props)
     return (
       <View style={styles.container}>
         <Image source={Constants.Images.home.userProfileImg} style={styles.userImg} resizeMode='stretch' />
@@ -279,13 +278,15 @@ class Home extends Component<{}> {
         <StylishList
             {...this.props}
             isLoggedIn = {this.isLoggedIn}
-            //data = {this.props.bookings.stylistList.length!==0 ? this.props.bookings.stylistList :  null}
+            data = {this.props.user.stylistList.length!==0 ? this.props.user.stylistList :  null}
             stylistListRefresh={()=>this.stylistListRefresh()}
             stylistListonReachedEnd={()=>this.stylistListonReachedEnd()}
             isRefreshing = {this.state.isRefreshing}
             isFooterVisible = {this.state.isFooterVisible}
-            onCancel={() => this.cancelChefCal()}
-
+            //onCancel={() => this.cancelChefCal()}
+            showStylist={(data) => {
+              this.setState({stylistBook:true,stylistDetails:data});
+            }}
         />
       </View>
     );
@@ -332,13 +333,11 @@ ReactMixin(Home.prototype, TimerMixin);
 const mapStateToProps = state => ({
   user: state.user,
   location: state.location,
-  bookings: state.bookings,
 });
 
 const mapDispatchToProps = dispatch => ({
   locationActions     : bindActionCreators(locationActions, dispatch),
   userActions         : bindActionCreators(userActions, dispatch),
-  bookingActions      : bindActionCreators(bookingActions, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

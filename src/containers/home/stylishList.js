@@ -51,13 +51,14 @@ export default class StylishList extends Component {
 
   renderItem({item, index}){
     let context = this;
+    //console.log('props ********* ',this.props.data)
     return(
       <HomeScreenListing 
         showStylist={this.props.showStylist}
-        isLoggedIn={this.props.isLoggedIn}
+        //isLoggedIn={this.props.isLoggedIn}
         navigation={this.props.navigation}
         item={item}
-        onCancel={this.props.onCancel}
+        //onCancel={this.props.onCancel}
       />
     );
   }

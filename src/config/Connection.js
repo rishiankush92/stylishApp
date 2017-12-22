@@ -16,7 +16,7 @@ const running_url   = staging,
     socket_url      = `ws://${running_url}/websocket`,
     apiBase_url     = `http://${running_url}/api/v1/`,
     staticPagesUrl  = `http://${running_url}/`,
-    mediaBase_url   = `http://${running_url}/store/files/uploads/`;
+    mediaBase_url   = `http://${running_url}/uploadedFiles/`;
 
 export default class Connection {
     static getResturl() {
@@ -32,7 +32,7 @@ export default class Connection {
     };
 
     static getMedia(_id) {
-        return mediaBase_url + _id;
+        return mediaBase_url;
     }
 
     static getStaticPage(url){

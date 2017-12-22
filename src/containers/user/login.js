@@ -15,7 +15,7 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
-//import { LoginManager,AccessToken } from 'react-native-fbsdk';
+import { LoginManager,AccessToken } from 'react-native-fbsdk';
 // const FBSDK = require('react-native-fbsdk');
 // const {
 //   LoginButton,
@@ -33,13 +33,15 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as UserActions from '../../redux/modules/user';
 import Regex from '../../utilities/Regex';
+import InstagramLogin from 'react-native-instagram-login'
 
 class Login extends Component<{}> {
   constructor(props){
     super(props);
     this.state={
       email:'',
-      password:''
+      password:'',
+      token:''
     }
   }
 
@@ -71,46 +73,45 @@ class Login extends Component<{}> {
     this.props.UserActions.loginRestAPI({...this.state});  
   }
 
-  // _fbAuth() {
-  //   LoginManager.logInWithReadPermissions(['public_profile','email']).then(function(result) {
-  //     if (result.isCancelled) {
-  //       console.log("Login Cancelled");
-  //     } else {
-  //       console.log('testttt',result)
-  //       AccessToken.getCurrentAccessToken().then((data) => {
-        
-  //         const { accessToken } = data
-  //         console.log('acccccc--',data.accessToken)
-  //         console.log('gadasdhsah')
-  //         fetch('https://graph.facebook.com/v2.5/me?fields=email,name&access_token=' + data.accessToken)
-  //         .then((response) => response.json())
-  //         .then((json) => {
-  //           // Some user object has been set up somewhere, build that user here
-  //           user.name = json.name
-  //           user.id = json.id
-  //           user.user_friends = json.friends
-  //           user.email = json.email
-  //           user.username = json.name
-  //           user.loading = false
-  //           user.loggedIn = true
-  //           user.avatar = setAvatar(json.id)   
-  //           console.log('asdsfds fdsf fsdsfdsfdsf',user.name)   
-  //         })
-  //         .catch(() => {
-  //           reject('ERROR GETTING DATA FROM FACEBOOK')
-  //         })
-
-  //       })
+  _fbAuth() {
+    LoginManager.logInWithReadPermissions(['public_profile','email']).then(function(result) {
+      if (result.isCancelled) {
+        console.log("Login Cancelled");
+      } else {
+        console.log('testttt',result)
+        AccessToken.getCurrentAccessToken().then((data) => {
       
-  //       console.log("Login Success permission granted:" + result.grantedPermissions);
-  //     }
-  //   }, function(error) {
-  //      console.log("some error occurred!!");
-  //   })
-  // }
-  // initUser(token) {
-   
-  // }
+          fetch('https://graph.facebook.com/v2.11/me?fields=email,name&access_token=' + data.accessToken.toString())
+          .then((response) => response.json())
+          .then((json) => {
+            console.log('sdfda12143546546',json.email)
+            
+            // Some user object has been set up somewhere, build that user here
+            // user.name = json.name
+            // user.id = json.id
+            // user.user_friends = json.friends
+            // user.email = json.email
+            // user.username = json.name
+            // user.loading = false
+            // user.loggedIn = true
+            // user.avatar = setAvatar(json.id)   
+          })
+          .catch(() => {
+            
+          })
+
+        })
+      
+        console.log("Login Success permission granted:" + result.grantedPermissions);
+      }
+    }, function(error) {
+       console.log("some error occurred!!");
+    })
+  }
+
+  instaLogin(token){
+    console.log('token ********** ',token)
+  }
   
   render() {
     const { navigate } = this.props.navigation;
@@ -140,11 +141,11 @@ class Login extends Component<{}> {
             />
             <Text style={styles.orText}>{Constants.i18n.common.or}</Text>
             <View style={styles.socialIcons}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>this._fbAuth()}>
               
                 <Image source={Constants.Images.user.facebook} style={styles.fbImg} resizeMode='stretch'/>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=> this.refs.instagramLogin.show()}>
                 <Image source={Constants.Images.user.instagram} style={styles.fbImg} resizeMode='stretch'/>
               </TouchableOpacity>
             </View>
@@ -153,6 +154,12 @@ class Login extends Component<{}> {
             </View>
           </View>
         </ScrollView>
+        <InstagramLogin
+          ref='instagramLogin'
+          clientId='264970ba5c844b949b65c66bc6bc6f97'
+          scopes={['public_content', 'follower_list']}
+          onLoginSuccess={(token) => this.instaLogin(token)}
+        />
       </View>
     );
   }

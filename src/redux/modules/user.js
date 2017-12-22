@@ -25,7 +25,7 @@ export const DEVICE_TOKEN           = "DEVICE_TOKEN";
 //export const RATINGS                = "RATINGS";
 export const GET_DETAILS            = "GET_DETAILS";
 export const LOG_IN_SUCCESS         = "LOG_IN_SUCCESS";
-
+export const GET_STYLIST_LIST       = "GET_STYLIST_LIST";
 // Action Creators
 export const CONSUMER_SIGNUP = (data) => ({ type: NEW_CONSUMER_USER,data});
 export const LOG_SUCCESS = (data) => ({ type: LOG_IN_SUCCESS,data});
@@ -33,7 +33,7 @@ export const LOG_SUCCESS = (data) => ({ type: LOG_IN_SUCCESS,data});
 export const setDeviceToken = (data) => ({type:DEVICE_TOKEN,data});
 //export const setRatings = (data) => ({type:RATINGS, data});
 //export const getDetails = (data) => ({type:GET_DETAILS , data});
-
+export const getStylist = (data) => ({type: GET_STYLIST_LIST,data});
 /**
 * Consumer Signup API.
 */
@@ -96,12 +96,43 @@ export const loginRestAPI = (data) => {
 };
 
 /**
+* Fetch list of stylist's
+*/
+export const stylistList = (requestObject,callback) => {
+  return dispatch => {
+    RestClient.get("customer/stylist", requestObject).then((result) => {
+      //console.log('result stylist list ******* ',result.data[0].results)
+      if(result.status == '200'){
+        // if(requestObject.page==0){
+        //   dispatch(clearStylist());
+        // }
+        if(_.isFunction(callback)){
+          callback(result.data[0].total);
+        }
+        setTimeout(()=>dispatch(getStylist(result.data[0].results)),0);
+      }else{
+        dispatch(ToastActionsCreators.displayInfo(result.msg));
+        if(_.isFunction(callback)){
+          callback(false);
+        }
+      }
+    }).catch(error => {
+      console.log("error=> ", error)
+      if(_.isFunction(callback)){
+        callback(false);
+      }
+    });
+  }
+};
+
+/**
 * Initial state
 */
 const initialState = {
   userDetails : null,
   deviceToken : "test",
-  reviews     : []
+  reviews     : [],
+  stylistList : [],
 };
 
 /**
@@ -118,8 +149,11 @@ export default function reducer(state = initialState, action) {
         case DEVICE_TOKEN:
           return { ...state, deviceToken:action.data };
 
-        case RATINGS:
-        return { ...state , reviews : action.data };
+        case GET_STYLIST_LIST:
+        return { ...state, stylistList: action.data};
+
+        // case RATINGS:
+        // return { ...state , reviews : action.data };
 
         // case UPDATE_SETTINGS:
         // return {...state , userDetails : {

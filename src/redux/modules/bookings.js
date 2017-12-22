@@ -20,13 +20,13 @@ import { ToastActionsCreators } from 'react-native-redux-toast';
 //import { cancelAllLocalNotifications } from '../../utilities/PushNotification';
 
 // Actions
-const GET_STYLIST_LIST   = "GET_STYLIST_LIST";
-const CLEAR_STYLIST_LIST = "CLEAR_LIST"; 
+export const GET_STYLIST_LIST   = "GET_STYLIST_LIST";
+//const CLEAR_STYLIST_LIST = "CLEAR_LIST"; 
 
 // Action Creators
 
 export const getStylist = (data) => ({type: GET_STYLIST_LIST,data});
-export const clearStylist = ()=>({type: CLEAR_STYLIST_LIST})
+//export const clearStylist = ()=>({type: CLEAR_STYLIST_LIST})
 
 /**
 * Fetch list of stylist's
@@ -34,15 +34,15 @@ export const clearStylist = ()=>({type: CLEAR_STYLIST_LIST})
 export const stylistList = (requestObject,callback) => {
   return dispatch => {
     RestClient.get("customer/stylist", requestObject).then((result) => {
-      //console.log('result stylist list ******* ',result.data)
+      //console.log('result stylist list ******* ',result.data[0].results)
       if(result.status == '200'){
-        if(requestObject.skip==0){
-          dispatch(clearStylist());
-        }
+        // if(requestObject.page==0){
+        //   dispatch(clearStylist());
+        // }
         if(_.isFunction(callback)){
-          callback(result.data.total);
+          callback(result.data[0].total);
         }
-        setTimeout(()=>dispatch(getStylist(result.data)),0);
+        setTimeout(()=>dispatch(getStylist(result.data[0].results)),10);
       }else{
         dispatch(ToastActionsCreators.displayInfo(result.msg));
         if(_.isFunction(callback)){
@@ -67,11 +67,13 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_STYLIST_LIST:
-          let stylistData = _.uniqBy([...state.stylistList,...action.data.stylistList],"_id")
-        return { ...state, stylistList:stylistData};
+          //let stylistData = _.uniqBy([...state.stylistList,...action.data.stylistList],"_id")
+          //let stylistData = [...state.stylistList,...action.data];
+          //console.log('reducer ********** called *********',{...state, stylistList:stylistData})
+        return { ...state, stylistList: action.data};
 
-        case CLEAR_STYLIST_LIST:
-        return { ...state, stylistList:[]};
+        // case CLEAR_STYLIST_LIST:
+        // return { ...state, stylistList:[]};
 
         // case LOG_OUT:
         // return initialState;
